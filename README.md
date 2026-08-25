@@ -11,6 +11,8 @@ Panduan ini menjelaskan alur kolaborasi berbasis **GitHub Flow**: `main` selalu 
 5. Semua perubahan harus melalui PR, automated checks, dan code review.
 6. Jangan pernah menyimpan password, token, API key, atau secret lain di repository.
 
+> **Aturan wajib:** jangan melakukan `git push` langsung ke `main` dan jangan mengubah isi `main` secara langsung. Perubahan hanya boleh masuk ke `main` melalui Pull Request yang sudah direview dan seluruh required checks-nya lulus.
+
 Alur ringkas:
 
 ```text
@@ -236,9 +238,9 @@ git push -u origin feat/101-login-php
 
 Buka PR dengan judul `feat(auth): tambah halaman login PHP`, tautkan issue `#101`, sertakan screenshot, hasil `php -l`, cara pengujian, dan catatan keamanan. Reviewer memeriksa validasi, session, CSRF, escaping, rate limiting, serta automated checks sebelum memberi approval.
 
-### 5. Masukkan ke `main`
+### 5. Ajukan merge ke `main`
 
-Alur yang direkomendasikan adalah **Squash and merge** melalui PR GitHub. Setelah merge:
+Alur yang diwajibkan adalah **Squash and merge** melalui PR GitHub. Author tidak boleh mengubah `main` atau melakukan push langsung ke `main`. Setelah PR disetujui, checks lulus, dan PR di-merge oleh GitHub:
 
 ```bash
 git switch main
@@ -246,15 +248,7 @@ git pull --ff-only origin main
 git branch -d feat/101-login-php
 ```
 
-Jika repository memang sengaja mengizinkan direct push untuk latihan dan tidak memiliki branch protection, perintahnya adalah:
-
-```bash
-git switch main
-git pull --ff-only origin main
-git push origin main
-```
-
-Direct push melewati review, audit PR, dan sebagian pemeriksaan tim sehingga tidak disarankan untuk repository bersama atau production.
+Jangan gunakan `git push origin main`, `git push --force origin main`, atau cara lain yang melewati PR. Branch protection harus menolak push langsung dan membatasi siapa yang dapat melakukan bypass untuk keadaan darurat yang terdokumentasi.
 
 ## Skenario konflik Git
 
